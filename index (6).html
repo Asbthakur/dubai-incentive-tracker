@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Dubai Incentive Tracker 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #1a2a4a;
+            --gold: #d4af37;
+            --light-gold: #f4e4ba;
+            --teal: #008080;
+            --white: #ffffff;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a2a4a 0%, #2d4a6d 100%);
+            min-height: 100vh;
+            padding: 10px;
+            font-size: 13px;
+        }
+        .container { max-width: 1600px; margin: 0 auto; }
+
+        /* Compact Header */
+        .header {
+            text-align: center;
+            padding: 12px 20px;
+            background: var(--navy);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .header h1 {
+            color: var(--gold);
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+        .header .trip-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .header .badge {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        .header .date-badge { background: var(--gold); color: var(--navy); }
+        .header .target-badge { background: var(--teal); color: white; }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+        .stat-card .icon { font-size: 1.3em; }
+        .stat-card .value { font-size: 1.3em; font-weight: 700; color: var(--navy); }
+        .stat-card .label { font-size: 0.7em; color: #666; }
+
+        /* Main 3-Column Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card-header {
+            background: var(--navy);
+            color: var(--gold);
+            padding: 10px 15px;
+            font-size: 0.95em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header.teal { background: var(--teal); color: white; }
+        .card-header.gold { background: var(--gold); color: var(--navy); }
+        .card-body { padding: 12px; }
+
+        /* Compact Form */
+        .form-group { margin-bottom: 10px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.8em;
+        }
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-family: 'Poppins', sans-serif;
+        }
+        .form-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .value-display {
+            background: var(--light-gold);
+            border: 1px solid var(--gold);
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .value-display .label { font-size: 0.7em; color: #666; }
+        .value-display .amount { font-size: 1.3em; font-weight: 700; color: var(--navy); }
+        .stock-info {
+            background: #e8f5e9;
+            border: 1px solid var(--success);
+            padding: 6px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 0.8em;
+        }
+        .stock-info.low { background: #ffebee; border-color: var(--danger); }
+        .btn-submit {
+            width: 100%;
+            padding: 10px;
+            background: var(--gold);
+            color: var(--navy);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(212,175,55,0.4); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* Compact Tables */
+        .table-wrapper { max-height: 280px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8em; }
+        th {
+            background: var(--navy);
+            color: var(--gold);
+            padding: 8px 5px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            font-size: 0.75em;
+        }
+        td { padding: 6px 5px; border-bottom: 1px solid #eee; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        tr:hover { background: var(--light-gold); }
+
+        /* Leaderboard specific */
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #ffec8b) !important; }
+        .rank-2 { background: linear-gradient(135deg, #e0e0e0, #f5f5f5) !important; }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #daa06d) !important; }
+        .rank-badge { font-size: 1.1em; }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill { height: 100%; border-radius: 4px; }
+        .status-qualified {
+            background: var(--success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+        .status-pending {
+            background: var(--warning);
+            color: var(--navy);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        /* Inventory specific */
+        .inv-controls {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .inv-search {
+            flex: 1;
+            min-width: 120px;
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.8em;
+        }
+        .filter-btn {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-family: 'Poppins', sans-serif;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--light-gold);
+            border-color: var(--gold);
+        }
+        .stock-high { background: #c8e6c9; color: #2e7d32; padding: 2px 6px; border-radius: 8px; font-size: 0.7em; font-weight: 600; }
+        .stock-medium { background: #fff3cd; color: #856404; padding: 2px 6px; border-radius: 8px; font-size: 0.7em; font-weight: 600; }
+        .stock-low { background: #f8d7da; color: #721c24; padding: 2px 6px; border-radius: 8px; font-size: 0.7em; font-weight: 600; }
+        .stock-out { background: #dc3545; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.7em; font-weight: 600; }
+
+        .inv-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+        .inv-stat {
+            text-align: center;
+            padding: 5px;
+            border-radius: 6px;
+            font-size: 0.75em;
+        }
+        .inv-stat.total { background: #e3f2fd; }
+        .inv-stat.high { background: #e8f5e9; }
+        .inv-stat.medium { background: #fff8e1; }
+        .inv-stat.low { background: #ffebee; }
+        .inv-stat .num { font-weight: 700; font-size: 1.2em; }
+
+        /* Records Section */
+        .records-section {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        .toast-success { background: var(--success); }
+        .toast-error { background: var(--danger); }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Loading */
+        .loading { text-align: center; padding: 20px; color: #666; }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-layout { grid-template-columns: 1fr 1fr; }
+            .main-layout > .card:first-child { grid-column: span 2; }
+        }
+        @media (max-width: 768px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .main-layout > .card:first-child { grid-column: span 1; }
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
+            .header { flex-direction: column; text-align: center; }
+        }
+        @media (max-width: 500px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Scrollbar */
+        .table-wrapper::-webkit-scrollbar { width: 6px; }
+        .table-wrapper::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+        #qtyWarning { color: var(--danger); font-size: 0.75em; display: none; margin-top: 3px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Compact Header -->
+        <div class="header">
+            <h1>✈️ DUBAI INCENTIVE 2025 🏆</h1>
+            <div class="trip-info">
+                <span class="badge date-badge"><i class="fas fa-calendar"></i> 9-12 Feb 2025</span>
+                <span class="badge target-badge">🎯 Target: ₹12 Lac/Member</span>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="icon">👥</div>
+                <div class="value" id="totalMembers">10</div>
+                <div class="label">Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">✅</div>
+                <div class="value" id="qualifiedCount">0</div>
+                <div class="label">Qualified</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">💰</div>
+                <div class="value" id="totalSales">₹0</div>
+                <div class="label">Total Sales</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📦</div>
+                <div class="value" id="totalProducts">53</div>
+                <div class="label">Products</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📊</div>
+                <div class="value" id="totalEntries">0</div>
+                <div class="label">Entries</div>
+            </div>
+        </div>
+
+        <!-- Main 3-Column Layout -->
+        <div class="main-layout">
+            <!-- Entry Form -->
+            <div class="card">
+                <div class="card-header"><i class="fas fa-plus-circle"></i> Add Sale</div>
+                <div class="card-body">
+                    <form id="salesForm">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Member</label>
+                            <select id="memberName" required>
+                                <option value="">-- Select --</option>
+                                <option>GAURI</option><option>SURAJ</option><option>ROHAN</option>
+                                <option>JITIN</option><option>POOJA</option><option>PANKAJ</option>
+                                <option>DIPALI</option><option>ASHWINI</option><option>NISHA</option><option>SUMANTH</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> Date</label>
+                                <input type="date" id="saleDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-sort-numeric-up"></i> Qty</label>
+                                <input type="number" id="qtySold" min="1" placeholder="Qty" required>
+                                <div id="qtyWarning">⚠️ Exceeds stock!</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-box"></i> Product</label>
+                            <select id="productName" required>
+                                <option value="">-- Select Product --</option>
+                            </select>
+                        </div>
+                        <div id="stockInfoBox" class="stock-info" style="display:none;">
+                            Stock: <strong id="availableStock">-</strong>
+                        </div>
+                        <div class="value-display">
+                            <div class="label">Value</div>
+                            <div class="amount" id="calculatedValue">₹0</div>
+                        </div>
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i> SUBMIT
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="card">
+                <div class="card-header gold"><i class="fas fa-trophy"></i> Leaderboard</div>
+                <div class="card-body">
+                    <div class="table-wrapper" id="leaderboardContainer">
+                        <div class="loading"><div class="spinner"></div>Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory -->
+            <div class="card">
+                <div class="card-header teal"><i class="fas fa-boxes"></i> Inventory</div>
+                <div class="card-body">
+                    <div class="inv-summary">
+                        <div class="inv-stat total"><div class="num" id="invTotal">53</div>Total</div>
+                        <div class="inv-stat high"><div class="num" id="invHigh">0</div>High</div>
+                        <div class="inv-stat medium"><div class="num" id="invMedium">0</div>Med</div>
+                        <div class="inv-stat low"><div class="num" id="invLow">0</div>Low</div>
+                    </div>
+                    <div class="inv-controls">
+                        <input type="text" class="inv-search" id="inventorySearch" placeholder="🔍 Search...">
+                        <button class="filter-btn active" onclick="filterInventory('all')">All</button>
+                        <button class="filter-btn" onclick="filterInventory('high')">✅</button>
+                        <button class="filter-btn" onclick="filterInventory('medium')">🟡</button>
+                        <button class="filter-btn" onclick="filterInventory('low')">🔴</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th onclick="sortInventory('name')" style="cursor:pointer">Product ↕</th>
+                                    <th onclick="sortInventory('opening')" style="cursor:pointer">Open</th>
+                                    <th onclick="sortInventory('sold')" style="cursor:pointer">Sold</th>
+                                    <th onclick="sortInventory('available')" style="cursor:pointer">Avail</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryBody">
+                                <tr><td colspan="5" class="loading">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Records Section -->
+        <div class="records-section">
+            <div class="card-header"><i class="fas fa-list"></i> Recent Sales (Read-Only)</div>
+            <div class="card-body">
+                <div class="table-wrapper" style="max-height: 200px;" id="recordsContainer">
+                    <div class="loading"><div class="spinner"></div>Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        
+        // ============================================
+        // PRODUCT DATA
+        // ============================================
+        const products = [
+            { sno: 1, name: "L-ASAP 10000 IU INJECTION", price: 491.44, openingStock: 3197 },
+            { sno: 6, name: "OLVORIN 300 MG", price: 132.00, openingStock: 4244 },
+            { sno: 8, name: "BIRAFINE 250MG", price: 2343.99, openingStock: 200 },
+            { sno: 10, name: "OLVORIN 50MG", price: 23.02, openingStock: 16338 },
+            { sno: 9, name: "BLEOCEL 15 IU", price: 430.00, openingStock: 874 },
+            { sno: 4, name: "MEREVA 1GM INJ", price: 85.00, openingStock: 4377 },
+            { sno: 7, name: "IVF HMG 150IU", price: 208.16, openingStock: 1520 },
+            { sno: 13, name: "GELDAZ-200 MG", price: 108.01, openingStock: 2293 },
+            { sno: 15, name: "TRETINOID CAPS", price: 450.00, openingStock: 543 },
+            { sno: 21, name: "HALKERAN 2MG", price: 564.64, openingStock: 343 },
+            { sno: 25, name: "BLEOSTED 15", price: 425.00, openingStock: 450 },
+            { sno: 27, name: "BIORIN 500MG", price: 165.00, openingStock: 1082 },
+            { sno: 17, name: "XARELTO 20 MG", price: 1409.14, openingStock: 117 },
+            { sno: 28, name: "BETASONE 52", price: 5.61, openingStock: 28450 },
+            { sno: 22, name: "DECA 200MG", price: 75.00, openingStock: 2120 },
+            { sno: 24, name: "IPOSMA 2GM", price: 480.00, openingStock: 330 },
+            { sno: 36, name: "EVERMIDE 10MG", price: 600.00, openingStock: 240 },
+            { sno: 5, name: "IVF HCG 1500IU", price: 88.00, openingStock: 1530 },
+            { sno: 31, name: "XVIN-C 1MG", price: 45.00, openingStock: 2950 },
+            { sno: 32, name: "EVERMIDE 25MG", price: 1100.00, openingStock: 119 },
+            { sno: 35, name: "OXYDROX 500MG CAP", price: 18.91, openingStock: 6830 },
+            { sno: 30, name: "XARELTO 10MG", price: 652.11, openingStock: 198 },
+            { sno: 14, name: "BIOSIDE 100MG", price: 73.00, openingStock: 1712 },
+            { sno: 16, name: "KAMAGRA JELLY 5GM/VOL-1", price: 11.50, openingStock: 10500 },
+            { sno: 34, name: "GEMCHEM -1000MG", price: 337.19, openingStock: 337 },
+            { sno: 42, name: "VERQUVO 5 MG", price: 1224.62, openingStock: 74 },
+            { sno: 47, name: "FAZOLIN 1G INJ", price: 43.00, openingStock: 2000 },
+            { sno: 41, name: "FLURASTED 500 MG", price: 18.00, openingStock: 4690 },
+            { sno: 40, name: "NAB-PACLITAX 100MG", price: 1150.00, openingStock: 72 },
+            { sno: 52, name: "VERA NATIVIS Natural Radiance", price: 621.01, openingStock: 129 },
+            { sno: 53, name: "OXPLATIN 50 MG", price: 185.71, openingStock: 428 },
+            { sno: 48, name: "VIRQUVO 10 MG", price: 1224.62, openingStock: 64 },
+            { sno: 60, name: "CELRIXAFOR-24MG INJ", price: 15714.00, openingStock: 4 },
+            { sno: 65, name: "HODPRO 50MG", price: 241.45, openingStock: 230 },
+            { sno: 69, name: "Oncovorin 50 Mg", price: 30.00, openingStock: 1210 },
+            { sno: 61, name: "PSICLIB 125 MG", price: 3620.32, openingStock: 10 },
+            { sno: 75, name: "ROCROSE FCM 10ML", price: 159.38, openingStock: 225 },
+            { sno: 77, name: "INCEPTOVA-FSH 150IU", price: 1317.86, openingStock: 27 },
+            { sno: 80, name: "G MP 50 MG", price: 35.79, openingStock: 980 },
+            { sno: 71, name: "DBPARB 150MG", price: 1242.33, openingStock: 28 },
+            { sno: 55, name: "IMATIB 400MG TAB", price: 405.00, openingStock: 85 },
+            { sno: 85, name: "LENVATOL 10MG", price: 2423.08, openingStock: 13 },
+            { sno: 88, name: "VALGAN 450 MG", price: 1501.11, openingStock: 20 },
+            { sno: 63, name: "DENCIQ INJ 120MG", price: 15000.00, openingStock: 2 },
+            { sno: 51, name: "OXEMIA 100MG", price: 996.87, openingStock: 28 },
+            { sno: 59, name: "XARELTO 15 MG", price: 1399.88, openingStock: 19 },
+            { sno: 76, name: "Totalflux Turmeric Mouthwash", price: 106.68, openingStock: 248 },
+            { sno: 54, name: "KAMAGRA TAB 100MG", price: 26.00, openingStock: 1000 },
+            { sno: 87, name: "Totalflux Mintfresh Mouthwash", price: 106.53, openingStock: 237 },
+            { sno: 78, name: "PIMERPLAST 500MG INJ", price: 702.00, openingStock: 35 },
+            { sno: 93, name: "DAUNEON 20 MG", price: 119.70, openingStock: 200 },
+            { sno: 97, name: "HELPRIN INJ 25000IU", price: 78.00, openingStock: 288 },
+            { sno: 33, name: "OXA-100MG INJ", price: 415.00, openingStock: 53 }
+        ];
+
+        const TARGET = 1200000;
+        const teamMembers = ["GAURI", "SURAJ", "ROHAN", "JITIN", "POOJA", "PANKAJ", "DIPALI", "ASHWINI", "NISHA", "SUMANTH"];
+
+        let salesData = [];
+        let productSales = {};
+        let currentFilter = 'all';
+        let currentSort = { column: 'name', order: 'asc' };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeForm();
+            loadData();
+        });
+
+        function initializeForm() {
+            document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
+            const productSelect = document.getElementById('productName');
+            [...products].sort((a, b) => a.name.localeCompare(b.name)).forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.name;
+                opt.textContent = `${p.name} (₹${p.price})`;
+                productSelect.appendChild(opt);
+            });
+            document.getElementById('productName').addEventListener('change', onProductChange);
+            document.getElementById('qtySold').addEventListener('input', calculateValue);
+            document.getElementById('inventorySearch').addEventListener('input', updateInventory);
+        }
+
+        function onProductChange() {
+            const productName = document.getElementById('productName').value;
+            const product = products.find(p => p.name === productName);
+            const stockBox = document.getElementById('stockInfoBox');
+            if (product) {
+                const sold = productSales[productName] || 0;
+                const available = product.openingStock - sold;
+                document.getElementById('availableStock').textContent = available.toLocaleString('en-IN');
+                stockBox.style.display = 'block';
+                stockBox.className = 'stock-info' + (available <= product.openingStock * 0.1 ? ' low' : '');
+            } else {
+                stockBox.style.display = 'none';
+            }
+            calculateValue();
+        }
+
+        function calculateValue() {
+            const productName = document.getElementById('productName').value;
+            const qty = parseInt(document.getElementById('qtySold').value) || 0;
+            const product = products.find(p => p.name === productName);
+            const warning = document.getElementById('qtyWarning');
+            if (product && qty > 0) {
+                document.getElementById('calculatedValue').textContent = '₹' + (product.price * qty).toLocaleString('en-IN', {maximumFractionDigits: 0});
+                const available = product.openingStock - (productSales[productName] || 0);
+                warning.style.display = qty > available ? 'block' : 'none';
+            } else {
+                document.getElementById('calculatedValue').textContent = '₹0';
+                warning.style.display = 'none';
+            }
+        }
+
+        document.getElementById('salesForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wait...';
+
+            const productName = document.getElementById('productName').value;
+            const product = products.find(p => p.name === productName);
+            const qty = parseInt(document.getElementById('qtySold').value);
+
+            const data = {
+                action: 'addSale',
+                timestamp: new Date().toISOString(),
+                date: document.getElementById('saleDate').value,
+                member: document.getElementById('memberName').value,
+                product: productName,
+                unitPrice: product.price,
+                qty: qty,
+                value: product.price * qty
+            };
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                showToast('✅ Sale recorded!', 'success');
+                document.getElementById('salesForm').reset();
+                document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('calculatedValue').textContent = '₹0';
+                document.getElementById('stockInfoBox').style.display = 'none';
+                setTimeout(loadData, 1500);
+            } catch (err) {
+                showToast('❌ Error!', 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> SUBMIT';
+        });
+
+        async function loadData() {
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL + '?action=getData');
+                const data = await res.json();
+                salesData = data.records || [];
+                calculateProductSales();
+                updateLeaderboard(data.leaderboard || []);
+                updateRecords(salesData);
+                updateInventory();
+                updateStats(data);
+            } catch (err) {
+                showDemoData();
+            }
+        }
+
+        function calculateProductSales() {
+            productSales = {};
+            salesData.forEach(r => {
+                productSales[r.product] = (productSales[r.product] || 0) + (parseInt(r.qty) || 0);
+            });
+        }
+
+        function updateLeaderboard(leaderboard) {
+            if (!leaderboard.length) leaderboard = teamMembers.map(name => ({ name, total: 0 }));
+            leaderboard.sort((a, b) => b.total - a.total);
+
+            let html = '<table><thead><tr><th></th><th>Name</th><th>Achieved</th><th>Progress</th><th>Status</th></tr></thead><tbody>';
+            leaderboard.forEach((m, i) => {
+                const rank = i + 1;
+                const pct = Math.min((m.total / TARGET) * 100, 100);
+                const color = pct >= 100 ? '#28a745' : pct >= 70 ? '#ffc107' : '#dc3545';
+                const emoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                const cls = rank <= 3 ? `rank-${rank}` : '';
+                html += `<tr class="${cls}">
+                    <td><span class="rank-badge">${emoji}</span></td>
+                    <td><strong>${m.name}</strong></td>
+                    <td>₹${(m.total/1000).toFixed(0)}K</td>
+                    <td><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div><small>${pct.toFixed(0)}%</small></td>
+                    <td><span class="${m.total >= TARGET ? 'status-qualified' : 'status-pending'}">${m.total >= TARGET ? '✅DUBAI' : '⏳'}</span></td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('leaderboardContainer').innerHTML = html;
+        }
+
+        function updateRecords(records) {
+            const container = document.getElementById('recordsContainer');
+            if (!records.length) {
+                container.innerHTML = '<p style="text-align:center;color:#666;padding:20px;">No records yet</p>';
+                return;
+            }
+            const latest = records.slice(-50).reverse();
+            let html = '<table><thead><tr><th>Date</th><th>Member</th><th>Product</th><th>Qty</th><th>Value</th></tr></thead><tbody>';
+            latest.forEach(r => {
+                html += `<tr><td>${r.date}</td><td><strong>${r.member}</strong></td><td>${r.product}</td><td>${r.qty}</td><td>₹${parseFloat(r.value).toLocaleString('en-IN')}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function updateInventory() {
+            const tbody = document.getElementById('inventoryBody');
+            let data = products.map(p => {
+                const sold = productSales[p.name] || 0;
+                const available = p.openingStock - sold;
+                let status, cls;
+                if (available <= 0) { status = 'OUT'; cls = 'stock-out'; }
+                else if (available <= p.openingStock * 0.1) { status = 'LOW'; cls = 'stock-low'; }
+                else if (available <= p.openingStock * 0.3) { status = 'MED'; cls = 'stock-medium'; }
+                else { status = 'HIGH'; cls = 'stock-high'; }
+                return { ...p, sold, available, status, cls };
+            });
+
+            if (currentFilter !== 'all') {
+                data = data.filter(p => {
+                    if (currentFilter === 'high') return p.status === 'HIGH';
+                    if (currentFilter === 'medium') return p.status === 'MED';
+                    if (currentFilter === 'low') return p.status === 'LOW' || p.status === 'OUT';
+                    return true;
+                });
+            }
+
+            const search = document.getElementById('inventorySearch').value.toLowerCase();
+            if (search) data = data.filter(p => p.name.toLowerCase().includes(search));
+
+            data.sort((a, b) => {
+                let av, bv;
+                switch (currentSort.column) {
+                    case 'name': av = a.name; bv = b.name; break;
+                    case 'opening': av = a.openingStock; bv = b.openingStock; break;
+                    case 'sold': av = a.sold; bv = b.sold; break;
+                    case 'available': av = a.available; bv = b.available; break;
+                    default: av = a.sno; bv = b.sno;
+                }
+                if (typeof av === 'string') return currentSort.order === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+                return currentSort.order === 'asc' ? av - bv : bv - av;
+            });
+
+            let html = '';
+            data.forEach(p => {
+                html += `<tr><td>${p.name}</td><td>${p.openingStock}</td><td>${p.sold}</td><td><strong>${p.available}</strong></td><td><span class="${p.cls}">${p.status}</span></td></tr>`;
+            });
+            tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center">No products</td></tr>';
+
+            const all = products.map(p => {
+                const avail = p.openingStock - (productSales[p.name] || 0);
+                if (avail <= 0) return 'out';
+                if (avail <= p.openingStock * 0.1) return 'low';
+                if (avail <= p.openingStock * 0.3) return 'medium';
+                return 'high';
+            });
+            document.getElementById('invTotal').textContent = products.length;
+            document.getElementById('invHigh').textContent = all.filter(s => s === 'high').length;
+            document.getElementById('invMedium').textContent = all.filter(s => s === 'medium').length;
+            document.getElementById('invLow').textContent = all.filter(s => s === 'low' || s === 'out').length;
+        }
+
+        function filterInventory(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            updateInventory();
+        }
+
+        function sortInventory(col) {
+            if (currentSort.column === col) currentSort.order = currentSort.order === 'asc' ? 'desc' : 'asc';
+            else { currentSort.column = col; currentSort.order = 'asc'; }
+            updateInventory();
+        }
+
+        function updateStats(data) {
+            const lb = data.leaderboard || [];
+            const qualified = lb.filter(m => m.total >= TARGET).length;
+            const total = lb.reduce((s, m) => s + m.total, 0);
+            document.getElementById('qualifiedCount').textContent = qualified;
+            document.getElementById('totalSales').textContent = '₹' + (total / 100000).toFixed(1) + 'L';
+            document.getElementById('totalEntries').textContent = (data.records || []).length;
+        }
+
+        function showDemoData() {
+            updateLeaderboard(teamMembers.map(n => ({ name: n, total: 0 })));
+            updateInventory();
+            document.getElementById('recordsContainer').innerHTML = '<p style="text-align:center;color:#666;padding:20px;">⚠️ Connect Google Sheet</p>';
+        }
+
+        function showToast(msg, type) {
+            const t = document.createElement('div');
+            t.className = `toast toast-${type}`;
+            t.innerHTML = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
